@@ -208,3 +208,7 @@ padding: 3px;
 	text-decoration: none;
 }
 
+table, th, td {
+    border: 1px solid black;
+}
+

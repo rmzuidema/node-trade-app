@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <title>Mix and Match Trades</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <link href="/assets/stylesheets/bidstyle.css" rel="stylesheet" type="text/css" />
+    <script language="JavaScript" type="text/javascript" src="/assets/javascripts/etrade.js"></script>
+
+</head>
+
+<body>
+    <div id="header">
+        <img src="/assets/images/header_sky1.jpg" width="800" height="80" />
+    </div>
+    <div id="menu">
+            <p>
+              <a href="/browse" class="navigation">Browse</a>
+              <a href="search.html" class="navigation">Search</a>
+              <% if  ( isAuthenticated ) { %>
+                <a href="/trade" class="navigation">Trade</a>
+                <a href="/logout" class="navigation">Logout</a>
+                <% } else { %>
+                <a href="/login" class="navigation">Login</a>
+              <% }  %>
+              <a href="/register" class="navigation">Register</a>
+              <a href="register.html" class="navigation">Forgot Password</a>
+              <a href="register.html" class="navigation">Confirmation Email</a>
+            </p>
+          </div>
+          <div id="shell"></div>
+          <div id="adds"></div>
+          <div id="content">
+    <form name="Tradeform" action="/trade" method=post>
+        <table border=0 cellspacing=0 cellpadding=0>
+            <tr align=left>
+                <td>
+                    <p class="p">Title</p>
+                </td>
+                <td valign="middle">
+                    <input id="titleId" type=text name="title" class="p" value="" size=50 maxlength=30>
+                    </b>
+                </td>
+            </tr>
+            <tr align=left>
+                <td>
+                    <p class="p">Description</p>
+                </td>
+                <td height="25">
+                    <textarea id="descriptionId" name="description" class="p" cols="50" rows="3" wrap="true"></textarea>
+                    </b>
+                </td>
+            </tr>
+            <tr align=left>
+                <td>
+                    <p class="p">Category</p>
+                </td>
+                <td>
+                    <select id="categoryId" name="category" class="p">
+                        <option value="Antiques">Antiques</option>
+                        <option value="Art">Art</option>
+                        <option value="Books">Books</option>
+                        <option value="Camera">Camera</option>
+                        <option value="Cellphones">Cellphones</option>
+                        <option value="Computers">Computers</option>
+                        <option value="Crafts">Crafts</option>
+                        <option value="Gift Certificates">Gift Certificates</option>
+                        <option value="Jewelry">Jewelry</option>
+                        <option value="Sports">Sports</option>
+                        <option value="Tickets">Tickets</option>
+                        <option value="Video Games">Video Games</option>
+                        <option value="Miscelaneous">Miscelaneous</option>
+                    </select>
+                </td>
+                <tr valign=top align=left>
+                    <td valign="top">
+                        <p class="p">Payment Option</p>
+                    </td>
+                    <td valign="middle">
+                        <select id="paymentOptionId" name="payment" class="p" >
+                            <option value="Cash">Cash</option>
+                            <option value="Trade">Trade</option>
+                            <option value="Cash or Trade">Cash or Trade</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr valign=top align=left>
+                    <td>
+                        <p class="p">Shipment Information</p>
+                    </td>
+                    <td>
+                        <textarea id="shipmentId" name="shipment" cols="50" rows="2" class="p" wrap="true"></textarea>
+                    </td>
+                </tr>
+                <tr valign=top align=left>
+                        <td>
+                            <p class="p">Exchange Wish</p>
+                        </td>
+                        <td>
+                            <textarea id="exchangeId" name="exchange" cols="50" rows="2" class="p" wrap="true"></textarea>
+                        </td>
+                    </tr>
+                    <tr align=left>
+                            <td>
+                                <p class="p">Price</p>
+                            </td>
+                            <td>
+                                <input id="priceId" type=text name="price" value="0.00" class="p" 
+                                    size=20 maxlength=20>
+                            </td>
+                        </tr>
+            
+        </table>
+       <table>
+            <tr valign=top align=left>
+                <td>&nbsp</td>
+                <td>
+                    <input type="submit" name="submit" id="submit" class="p" value="Next">
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+    <p class="p"></p>
+
+</body>
+
+</html>

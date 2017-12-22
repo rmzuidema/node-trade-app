@@ -16,7 +16,8 @@ require('./config/config');
 
 var { mongoose } = require('./db/mongoose');
 var { User } = require('./models/user');
-var {sendValidationEmail} = require('./utils/emailHelper');
+var { Item } = require('./models/item');
+var { sendValidationEmail } = require('./utils/emailHelper');
 
 
 
@@ -94,8 +95,8 @@ app.use((req, res, next) => {
 });
 
 app.get('/', function (req, res) {
-//    console.log('Request URL: ', req.url);
- //   console.log('Cookies: ', req.cookies);
+    //    console.log('Request URL: ', req.url);
+    //   console.log('Cookies: ', req.cookies);
     res.render('index', {
         isAuthenticated: req.isAuthenticated(),
         user: req.user
@@ -116,9 +117,9 @@ app.get('/login', function (req, res) {
 });
 
 app.post('/login', function (req, res, next) {
-//    console.log('In login post ');
+    //    console.log('In login post ');
     passport.authenticate('local', function (err, user, info) {
- //       console.log('User in login post ', user);
+        //       console.log('User in login post ', user);
         if (err) {
             return next(err);
         }
@@ -127,7 +128,7 @@ app.post('/login', function (req, res, next) {
             // re-render the login form with a message
             return res.render('login', { message: info.message })
         }
-//        console.log('isauth ', req.isAuthenticated());
+        //        console.log('isauth ', req.isAuthenticated());
         req.logIn(user, function (err) {
             if (err) {
                 return next(err);
@@ -141,17 +142,7 @@ app.post('/login', function (req, res, next) {
     })(req, res, next);
 });
 
-// app.get('/register', function (req, res) {
-//     //res.render('register');
-//     var email = 'robert.m.zuidema@gmail.com';
-//     var password = 'zuidema';
-//     User.findByCredentials(email, password).then((obj) => {
-//         console.log('Object ', obj);
-//     }, (err) => {
-//         console.log(err);
-//     });
-//     res.render('register');
-// });
+
 
 app.post('/register', (req, res) => {
 
@@ -163,7 +154,7 @@ app.post('/register', (req, res) => {
     var user = new User({ username, email, password });
     user.save().then((doc) => {
         console.log('doc ', doc);
-        sendValidationEmail(email,'robert.m.zuidema@gmail.com', 'Validate your email');
+        //sendValidationEmail(email,'robert.m.zuidema@gmail.com', 'Validate your email');
         return res.render('login', { message: 'login' })
     }, (error) => {
         res.status(400).send(error);
@@ -171,15 +162,70 @@ app.post('/register', (req, res) => {
 
 });
 
+app.get('/trade', function (req, res) {
+    console.log('User in trade ', req.user);
+    res.render('item', {
+        isAuthenticated: req.isAuthenticated(),
+        user: req.user
+    });
+});
+
+app.get('/browse', async (req, res) => {
+    console.log('User in browse ', req.user);
+    var items = await Item.find({});
+    console.log(items);
+    res.render('browse', {
+        isAuthenticated: req.isAuthenticated(),
+        user: req.user,
+        items: items
+    });
+});
+
+app.post('/trade', (req, res) => {
+
+    //console.log('Body: ', req.body);
+
+    var title = req.body.title;
+    var description = req.body.description;
+    var category = req.body.category;
+    var payment = req.body.payment;
+    var shipment = req.body.shipment;
+    var exchangeWish = req.body.exchange;
+    var minimumPrice = req.body.price;
+    var owner = req.user.username;
+    console.log('Title ', title);
+    console.log('description ', description);
+    console.log('category ', category);
+    console.log('payment ', payment);
+    console.log('shipment ', shipment);
+    console.log('exchange ', exchangeWish);
+    console.log('price ', minimumPrice);
+    console.log('user ', owner);
+    var item = new Item({ title, description, category, shipment, payment, sold: false, exchangeWish, minimumPrice, owner });
+    item.save().then((result) => {
+        console.log(result);
+        res.render('item', {
+            isAuthenticated: req.isAuthenticated(),
+            user: req.user
+        });
+    }, (error) => {
+        console.log(error);
+        res.status(400).send(error);
+    });
+
+
+
+});
+
 app.post('/validateUsername', async (req, res) => {
     var username = req.body.username;
- //   console.log('Username in validate ', username);
+    //   console.log('Username in validate ', username);
     var theUser = await User.findByUsername(username);
-//    console.log('TheUser ', theUser);
+    //    console.log('TheUser ', theUser);
     if (theUser) {
-        res.status(200).send({valid: false});
+        res.status(200).send({ valid: false });
     } else {
-        res.status(200).send({valid: true});       
+        res.status(200).send({ valid: true });
     }
 
 });

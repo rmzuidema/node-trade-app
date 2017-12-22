@@ -17,11 +17,12 @@
   </div>
   <div id="menu">
     <p>
-      <a href="JavaScript:displayBrowse()" class="navigation">Browse</a>
+      <a href="/browse" class="navigation">Browse</a>
       <a href="search.html" class="navigation">Search</a>
       <% if  ( isAuthenticated ) { %>
+        <a href="/trade" class="navigation">Trade</a>
         <a href="/logout" class="navigation">Logout</a>
-      <% } else { %>
+        <% } else { %>
         <a href="/login" class="navigation">Login</a>
       <% }  %>
       <a href="/register" class="navigation">Register</a>
