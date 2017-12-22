@@ -8,10 +8,10 @@ MongoClient.connect('mongodb://localhost:27017/etrades', (err, db) => {
     }
     console.log('Connected to MongoDB');
     // Pass an object to handle complex queries
-   var userRet = async User.findByEmail('zuidema@bellsouth.net');
+   var userRet = User.findByEmail('zuidema@bellsouth.net');
    
    
-     await console.log(userRet);
+     console.log(userRet);
     db.close();
     
 

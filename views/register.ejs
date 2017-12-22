@@ -19,8 +19,8 @@
    <form name="registerForm" action="/register" method=post>
        <table>
 	     <tr>
-		    <td><p class="p">Choose a Customer Id (Screen name)</p></td>
-		    <td><input id="username" name="username" type="text" size="20" ></td> 
+		    <td><p class="p">Choose a user name (Screen name)</p></td>
+		    <td><input id="username" name="username" type="text" size="20" onBlur="validateUsername()"></td> 
 		    <td><div id="customerIdMessage"></div></td> 
 	     </tr>
 		 <tr>
@@ -48,7 +48,7 @@
 		-->
 		 <tr>
 		    <td>&nbsp;</td>
-		    <td><input name="submit_btn" type="submit" value="Register" /></td>
+		    <td><input name="submit_btn" id="submit_btn" type="submit" value="Register" /></td>
 		 </tr>
       </table>
   </form>

@@ -162,10 +162,10 @@ var option;
   }
 
 
-   function validateCustomerId() {
-     var customerDiv = document.getElementById("customer_id");
-     var url = "validateCustomer"
-     var data ="id=" + escape(customerDiv.value); 
+   function validateUsername() {
+     var customerDiv = document.getElementById("username");
+     var url = "validateUsername"
+     var data ="username=" + escape(customerDiv.value); 
      initRequest(url);
      req.onreadystatechange = processValidate;
      req.open("POST", url, true);
@@ -182,10 +182,16 @@ var option;
   function processValidate() {
     if (req.readyState == 4) {
         if (req.status == 200) {
-            var message = req.responseXML.getElementsByTagName("valid")[0].childNodes[0].nodeValue;
-            setMessageUsingInline(message);
+          
+          var responseJson =  JSON.parse(req.responseText);
+
+          // var message = req.responseXML.getElementsByTagName("valid")[0].childNodes[0].nodeValue;
+           var message = responseJson.valid;
+           console.log('responseJson ', responseJson);
+           console.log('Message ', message);
+           setMessageUsingInline(message);
             var submitBtn = document.getElementById("submit_btn");
-            if (message == "false") {
+            if (message === false) {
               submitBtn.disabled = true;
             } else {
               submitBtn.disabled = false;
@@ -196,7 +202,7 @@ var option;
 
    function setMessageUsingInline(message) {
       mdiv = document.getElementById("customerIdMessage");
-      if (message == "false") {
+      if (message === false) {
          mdiv.innerHTML = "Id taken";
          disableSubmitBtn();
       } else {

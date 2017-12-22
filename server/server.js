@@ -16,6 +16,7 @@ require('./config/config');
 
 var { mongoose } = require('./db/mongoose');
 var { User } = require('./models/user');
+var {sendValidationEmail} = require('./utils/emailHelper');
 
 
 
@@ -42,7 +43,7 @@ passport.use(new passportLocal.Strategy(function (username, password, done) {
     //   console.log('Variables ', username, password);
     User.findForLogin(username, password).then((result) => {
         if (result) {
-                      console.log('in if of passport ', username);
+            //          console.log('in if of passport ', username);
             return done(null, { username: username });
         } else {
             //           console.log('in else of passport');
@@ -93,8 +94,8 @@ app.use((req, res, next) => {
 });
 
 app.get('/', function (req, res) {
-    console.log('Request URL: ', req.url);
-    console.log('Cookies: ', req.cookies);
+//    console.log('Request URL: ', req.url);
+ //   console.log('Cookies: ', req.cookies);
     res.render('index', {
         isAuthenticated: req.isAuthenticated(),
         user: req.user
@@ -115,9 +116,9 @@ app.get('/login', function (req, res) {
 });
 
 app.post('/login', function (req, res, next) {
-    console.log('In login post ');
+//    console.log('In login post ');
     passport.authenticate('local', function (err, user, info) {
-        console.log('User in login post ', user);
+ //       console.log('User in login post ', user);
         if (err) {
             return next(err);
         }
@@ -126,7 +127,7 @@ app.post('/login', function (req, res, next) {
             // re-render the login form with a message
             return res.render('login', { message: info.message })
         }
-        console.log('isauth ', req.isAuthenticated());
+//        console.log('isauth ', req.isAuthenticated());
         req.logIn(user, function (err) {
             if (err) {
                 return next(err);
@@ -154,7 +155,7 @@ app.post('/login', function (req, res, next) {
 
 app.post('/register', (req, res) => {
 
-    console.log('Body: ', req.body);
+    //console.log('Body: ', req.body);
 
     var username = req.body.username;
     var email = req.body.email;
@@ -162,9 +163,24 @@ app.post('/register', (req, res) => {
     var user = new User({ username, email, password });
     user.save().then((doc) => {
         console.log('doc ', doc);
+        sendValidationEmail(email,'robert.m.zuidema@gmail.com', 'Validate your email');
+        return res.render('login', { message: 'login' })
     }, (error) => {
         res.status(400).send(error);
     });
+
+});
+
+app.post('/validateUsername', async (req, res) => {
+    var username = req.body.username;
+ //   console.log('Username in validate ', username);
+    var theUser = await User.findByUsername(username);
+//    console.log('TheUser ', theUser);
+    if (theUser) {
+        res.status(200).send({valid: false});
+    } else {
+        res.status(200).send({valid: true});       
+    }
 
 });
 
