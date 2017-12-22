@@ -29,11 +29,13 @@
                         <a href="register.html" class="navigation">Confirmation Email</a>
         </p>
     </div>
-    <div id="shell"></div>
+ <!--   <div id="shell"></div>
     <div id="adds"></div>
+ -->
     <div id="content">
         <table>
             <tr>
+                <th></th>
                 <th>Title</th>
                 <th>Description</th>
                 <th>Category</th>
@@ -44,6 +46,9 @@
             </tr>
             <% for (var i = 0; i < items.length; i++) { %>
                 <tr>
+                    <td>
+                        <img src="/assets/images/no_image.jpg" height="50" width="60">
+                    </td>
                     <td>
                         <%= items[i].title %>
                     </td>

@@ -171,9 +171,9 @@ app.get('/trade', function (req, res) {
 });
 
 app.get('/browse', async (req, res) => {
-    console.log('User in browse ', req.user);
+    //console.log('User in browse ', req.user);
     var items = await Item.find({});
-    console.log(items);
+    //console.log(items);
     res.render('browse', {
         isAuthenticated: req.isAuthenticated(),
         user: req.user,
@@ -193,17 +193,17 @@ app.post('/trade', (req, res) => {
     var exchangeWish = req.body.exchange;
     var minimumPrice = req.body.price;
     var owner = req.user.username;
-    console.log('Title ', title);
-    console.log('description ', description);
-    console.log('category ', category);
-    console.log('payment ', payment);
-    console.log('shipment ', shipment);
-    console.log('exchange ', exchangeWish);
-    console.log('price ', minimumPrice);
-    console.log('user ', owner);
+    // console.log('Title ', title);
+    // console.log('description ', description);
+    // console.log('category ', category);
+    // console.log('payment ', payment);
+    // console.log('shipment ', shipment);
+    // console.log('exchange ', exchangeWish);
+    // console.log('price ', minimumPrice);
+    // console.log('user ', owner);
     var item = new Item({ title, description, category, shipment, payment, sold: false, exchangeWish, minimumPrice, owner });
     item.save().then((result) => {
-        console.log(result);
+//        console.log(result);
         res.render('item', {
             isAuthenticated: req.isAuthenticated(),
             user: req.user

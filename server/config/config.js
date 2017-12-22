@@ -15,7 +15,7 @@ if (env === 'Local') {
     });
 }
 if ( env === 'Local') {
-    process.env.MONGOURI='mongodb://localhost:27017/NewTodoApp';
+    process.env.MONGOURI='mongodb://localhost:27017/etrades';
 } else {
-    process.env.MONGOURI='mongodb://todouser:todouser58@ds129966.mlab.com:29966/newtodoapp';    
+    process.env.MONGOURI='mongodb://todouser:todouser58@ds129966.mlab.com:29966/etrades';    
 }
