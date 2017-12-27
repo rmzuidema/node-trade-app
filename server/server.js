@@ -1,11 +1,15 @@
 const express = require('express');
+const expressSession = require('express-session');
 const path = require('path');
 const app = express();
 
-const expressSession = require('express-session');
 // the passport require stuff
 const passport = require('passport');
 const passportLocal = require('passport-local');
+
+
+var routes = require('./routes/route');
+var { User } = require('./models/user');
 
 
 // The required modules
@@ -15,11 +19,15 @@ app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 require('./config/config');
 
 var { mongoose } = require('./db/mongoose');
-var { User } = require('./models/user');
-var { Item } = require('./models/item');
-var { sendValidationEmail } = require('./utils/emailHelper');
 
 
+app.set('views', './views'); // sets the location to look for files in the views folder
+
+app.set('view engine', 'ejs'); // 'ejs' is the file extension 
+
+app.use('/assets', express.static(path.join(__dirname + '/../public')));
+
+const port = process.env.PORT || 3000;
 
 app.use(expressSession({
     secret: process.env.PROCESS_SECRET || 'bobzuidema',
@@ -77,44 +85,7 @@ passport.deserializeUser(function (user, done) {
     });
 });
 
-app.set('views', './views'); // sets the location to look for files in the views folder
-
-app.set('view engine', 'ejs'); // 'ejs' is the file extension 
-
-app.use('/assets', express.static(path.join(__dirname + '/../public')));
-
-const port = process.env.PORT || 3000;
-
-
-app.use((req, res, next) => {
-    var now = new Date().toString();
-    var log = `${now}: ${req.method} ${req.url}`;
-
-    console.log(log);
-    next();
-});
-
-app.get('/', function (req, res) {
-    //    console.log('Request URL: ', req.url);
-    //   console.log('Cookies: ', req.cookies);
-    res.render('index', {
-        isAuthenticated: req.isAuthenticated(),
-        user: req.user
-    });
-});
-
-app.get('/register', function (req, res) {
-
-    res.render('register', {
-        isAuthenticated: req.isAuthenticated(),
-        user: req.user
-    });
-});
-
-app.get('/login', function (req, res) {
-
-    res.render('login');
-});
+app.use('/', routes);
 
 app.post('/login', function (req, res, next) {
     //    console.log('In login post ');
@@ -140,94 +111,6 @@ app.post('/login', function (req, res, next) {
         });
 
     })(req, res, next);
-});
-
-
-
-app.post('/register', (req, res) => {
-
-    //console.log('Body: ', req.body);
-
-    var username = req.body.username;
-    var email = req.body.email;
-    var password = req.body.encrypted_password;
-    var user = new User({ username, email, password });
-    user.save().then((doc) => {
-        console.log('doc ', doc);
-        //sendValidationEmail(email,'robert.m.zuidema@gmail.com', 'Validate your email');
-        return res.render('login', { message: 'login' })
-    }, (error) => {
-        res.status(400).send(error);
-    });
-
-});
-
-app.get('/trade', function (req, res) {
-    console.log('User in trade ', req.user);
-    res.render('item', {
-        isAuthenticated: req.isAuthenticated(),
-        user: req.user
-    });
-});
-
-app.get('/browse', async (req, res) => {
-    //console.log('User in browse ', req.user);
-    var items = await Item.find({});
-    //console.log(items);
-    res.render('browse', {
-        isAuthenticated: req.isAuthenticated(),
-        user: req.user,
-        items: items
-    });
-});
-
-app.post('/trade', (req, res) => {
-
-    //console.log('Body: ', req.body);
-
-    var title = req.body.title;
-    var description = req.body.description;
-    var category = req.body.category;
-    var payment = req.body.payment;
-    var shipment = req.body.shipment;
-    var exchangeWish = req.body.exchange;
-    var minimumPrice = req.body.price;
-    var owner = req.user.username;
-    // console.log('Title ', title);
-    // console.log('description ', description);
-    // console.log('category ', category);
-    // console.log('payment ', payment);
-    // console.log('shipment ', shipment);
-    // console.log('exchange ', exchangeWish);
-    // console.log('price ', minimumPrice);
-    // console.log('user ', owner);
-    var item = new Item({ title, description, category, shipment, payment, sold: false, exchangeWish, minimumPrice, owner });
-    item.save().then((result) => {
-//        console.log(result);
-        res.render('item', {
-            isAuthenticated: req.isAuthenticated(),
-            user: req.user
-        });
-    }, (error) => {
-        console.log(error);
-        res.status(400).send(error);
-    });
-
-
-
-});
-
-app.post('/validateUsername', async (req, res) => {
-    var username = req.body.username;
-    //   console.log('Username in validate ', username);
-    var theUser = await User.findByUsername(username);
-    //    console.log('TheUser ', theUser);
-    if (theUser) {
-        res.status(200).send({ valid: false });
-    } else {
-        res.status(200).send({ valid: true });
-    }
-
 });
 
 app.listen(port, function () {

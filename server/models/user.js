@@ -83,8 +83,11 @@ UserSchema.statics.findForLogin = async function(username, password){
   var User = this;
   // returning a promise that can be rejected or chained to a then
   var obj = await User.findOne({username: username});
-  var res = await bcrypt.compare(password, obj.password);
-  return res;
+  if (obj) {
+    var res = await bcrypt.compare(password, obj.password);
+    return res;
+  }
+    return false;
 }
 
 var User = mongoose.model('User', UserSchema);
